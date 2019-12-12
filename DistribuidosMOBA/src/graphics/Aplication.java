@@ -15,6 +15,9 @@ public class Aplication extends Canvas implements Runnable{
 	
 	public static volatile boolean working = false;
 	
+	private static int ups = 0;
+	private static int fps = 0;
+	
 	private static final String NAME = "M.O.B.A. UR-Distribuidos";
 	
 	private static JFrame window;
@@ -32,14 +35,43 @@ public class Aplication extends Canvas implements Runnable{
 		window.setLayout(new BorderLayout());
 		window.add(this,BorderLayout.CENTER);
 		window.pack();
-		window.setLocationRelativeTo(null); //Centrado en el escritorio.
+		window.setLocationRelativeTo(null); //Center to the desktop.
 		window.setVisible(true);
 	}
 
 	@Override
 	public void run() {
+		final int NS_FOR_SEC = 1000000000; //Conversion Nano to Sec
+		final byte UPS_OBJECTIVE = 60; //FPS
+		final double NS_IN_UPDATE = NS_FOR_SEC/UPS_OBJECTIVE;
+		
+		long updateReference = System.nanoTime();
+		long counterReference = System.nanoTime();
+		
+		double timePassed;
+		double delta = 0;
+		
 		while(working) {
+			final long startLoop = System.nanoTime();
 			
+			timePassed = startLoop - updateReference;
+			updateReference = startLoop;
+			
+			delta += timePassed / NS_IN_UPDATE;
+			
+			while(delta>=1) {
+				update();
+				delta--;
+			}
+			
+			draw();
+			
+			if(System.nanoTime()-counterReference > NS_FOR_SEC) {
+				window.setTitle(NAME + " || UPS: " + ups + " || FPS: " + fps );
+				ups = 0;
+				fps = 0;
+				counterReference = System.nanoTime();
+			}
 		}
 	}
 	
@@ -51,5 +83,19 @@ public class Aplication extends Canvas implements Runnable{
 	
 	public synchronized void stop_thread() {
 		working = false;
+		
+		try {
+			thread.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void update() {//Update the Players stats
+		ups++;
+	}
+	
+	private void draw() {//Draw the map
+		fps++;
 	}
 }
