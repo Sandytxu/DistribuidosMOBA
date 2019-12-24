@@ -3,8 +3,11 @@ package graphics;
 import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Dimension;
+import java.awt.event.KeyListener;
 
 import javax.swing.JFrame;
+
+import controls.Keyboard;
 
 public class Aplication extends Canvas implements Runnable{
 
@@ -23,9 +26,14 @@ public class Aplication extends Canvas implements Runnable{
 	private static JFrame window;
 	private static Thread thread;
 	
+	private static Keyboard keyboard;
+	
 	
 	public Aplication() {
 		setPreferredSize(new Dimension(WIDTH,HEIGTH));
+		
+		keyboard = new Keyboard();
+		addKeyListener(keyboard);
 		
 		window = new JFrame(NAME);
 		
@@ -50,6 +58,8 @@ public class Aplication extends Canvas implements Runnable{
 		
 		double timePassed;
 		double delta = 0;
+		
+		requestFocus();//Focus the window to use the keyboard;
 		
 		while(working) {
 			final long startLoop = System.nanoTime();
@@ -92,6 +102,20 @@ public class Aplication extends Canvas implements Runnable{
 	}
 	
 	private void update() {//Update the Players stats
+		keyboard.update();
+		if(keyboard.up) {
+			System.out.println("UP");
+		}
+		if(keyboard.down) {
+			System.out.println("DOWN");
+		}
+		if(keyboard.left) {
+			System.out.println("LEFT");
+		}
+		if(keyboard.rigth) {
+			System.out.println("RIGTH");
+		}
+		
 		ups++;
 	}
 	
