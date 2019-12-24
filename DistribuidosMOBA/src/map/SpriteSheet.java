@@ -26,4 +26,9 @@ public class SpriteSheet {
 		
 		
 	}
+	
+	public int getWidth() {
+		return this.width;
+	}
+	
 }
