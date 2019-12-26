@@ -8,6 +8,10 @@ public class Sprite {
 
 	public int[] pixels;
 	private final SpriteSheet sheet;
+	
+	//Sprite Collection;
+	public static Sprite test = new Sprite(128,0,0,SpriteSheet.map);
+	//End Collection;
 
 	public Sprite(final int size, final int col, final int row, final SpriteSheet sheet) {
 		this.size = size;
