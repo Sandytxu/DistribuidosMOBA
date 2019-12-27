@@ -3,11 +3,16 @@ package graphics;
 import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
 
 import javax.swing.JFrame;
 
 import controls.Keyboard;
+import map.Screen;
 
 public class Aplication extends Canvas implements Runnable{
 
@@ -28,9 +33,19 @@ public class Aplication extends Canvas implements Runnable{
 	
 	private static Keyboard keyboard;
 	
+	private static int x = 0;
+	private static int y = 0;
+	
+	private static Screen screen;
+	
+	
+	private static BufferedImage image = new BufferedImage(WIDTH,HEIGTH,BufferedImage.TYPE_INT_RGB);
+	private static int[] pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
 	
 	public Aplication() {
 		setPreferredSize(new Dimension(WIDTH,HEIGTH));
+		
+		screen = new Screen(WIDTH,HEIGTH);
 		
 		keyboard = new Keyboard();
 		addKeyListener(keyboard);
@@ -120,6 +135,24 @@ public class Aplication extends Canvas implements Runnable{
 	}
 	
 	private void draw() {//Draw the map
+		BufferStrategy strategy = getBufferStrategy();
+		
+		if(strategy==null) {
+			createBufferStrategy(3);
+			return;
+		}
+		
+		screen.clean();
+		screen.draw(0, 0);
+		
+		System.arraycopy(screen.pixels, 0, pixels, 0, pixels.length);
+		
+		Graphics g = strategy.getDrawGraphics();
+		g.drawImage(image,0,0,getWidth(),getHeight(),null);
+		g.dispose();
+		
+		strategy.show();
+		
 		fps++;
 	}
 }

@@ -10,7 +10,7 @@ public class Sprite {
 	private final SpriteSheet sheet;
 	
 	//Sprite Collection;
-	public static Sprite test = new Sprite(128,0,0,SpriteSheet.map);
+	public static Sprite test = new Sprite(32,0,0,SpriteSheet.map);
 	//End Collection;
 
 	public Sprite(final int size, final int col, final int row, final SpriteSheet sheet) {

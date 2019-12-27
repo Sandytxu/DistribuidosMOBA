@@ -11,7 +11,7 @@ public class SpriteSheet {
 	public final int[] pixels;
 
 	// Collection Sprites;
-	public static SpriteSheet map = new SpriteSheet("/textures/map.jpg", 1000, 459);
+	public static SpriteSheet map = new SpriteSheet("/textures/all_sprites.png", 1024, 832);
 	// End collection;
 
 	public SpriteSheet(final String rute, final int width, int heigth) {
